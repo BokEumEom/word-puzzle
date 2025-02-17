@@ -1,11 +1,11 @@
-
+import React from 'react';
 import styles from '../styles/CrosswordBoard.module.css';
 import { useCrossword } from '../hooks/useCrossword';
-import Clues from './Clues'; // 단서 컴포넌트 임포트
+import Clues from './Clues';
 
 const CrosswordBoard = ({ puzzleData }) => {
   const { grid, handleChange, handleSubmit, handleReset, resultMessage } = useCrossword(puzzleData);
-  const { acrossClues, downClues } = puzzleData; // 가로, 세로 단서 데이터
+  const { acrossClues, downClues } = puzzleData;
 
   return (
     <div className={styles.crosswordContainer}>
@@ -15,7 +15,12 @@ const CrosswordBoard = ({ puzzleData }) => {
           <div key={rowIndex} className={styles.row}>
             {row.map((cell, colIndex) => {
               if (cell.isBlock) {
-                return <div key={colIndex} className={styles.blockCell} />;
+                // 차단된 칸: blockCell 스타일 적용
+                return (
+                  <div key={colIndex} className={styles.blockCell}>
+                    {/* blockCell::after 에서 ✖ 표시 */}
+                  </div>
+                );
               }
               const clueNumber = cell.acrossStart || cell.downStart;
               return (
@@ -32,7 +37,9 @@ const CrosswordBoard = ({ puzzleData }) => {
                     maxLength={1}
                     value={cell.letter}
                     onChange={(e) => handleChange(rowIndex, colIndex, e.target.value)}
-                    className={styles.cellInput}
+                    className={`${styles.cellInput} ${
+                      cell.letter === '' ? styles.emptyInput : ''
+                    }`}
                   />
                 </div>
               );

@@ -8,7 +8,7 @@
 }
 
 .title {
-  font-family: 'Danjo-bold-Regular', sans-serif;
+  font-family: var(--primary-font);
   font-size: 2.5rem;
   margin: 0;
 }

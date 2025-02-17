@@ -1,9 +1,14 @@
-@font-face {
-  font-family: 'Danjo-bold-Regular';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Danjo-bold-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
+@font-face{
+  font-family:'DNFForgedBlade';font-style:normal;font-weight:300;
+  src:url('//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Light.otf')format('opentype')}
+  
+  @font-face{
+  font-family:'DNFForgedBlade';font-style:normal;font-weight:500;
+  src:url('//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Medium.otf')format('opentype')}
+  
+  @font-face{
+  font-family:'DNFForgedBlade';font-style:normal;font-weight:700;
+  src:url('//cdn.df.nexon.com/img/common/font/DNFForgedBlade-Bold.otf')format('opentype')}
 
 :root {
   /* 부드럽고 따뜻한 색상 팔레트 */
@@ -13,13 +18,14 @@
   --header-bg: linear-gradient(135deg, #F4A261, #E07A5F);
   --footer-bg: #FCEFE3;           /* 부드러운 베이지 */
   --text-color: #5D4037;          /* 따뜻한 다크 브라운 */
+  --primary-font: 'DNFForgedBlade', sans-serif;
   /* 실제 게임 대표 이미지 URL로 교체 */
-  --hero-bg: url('/path/to/hero-image.jpg') center/cover no-repeat;
+  --hero-bg: url('/assets/hero-image.webp') center/cover no-repeat;
 }
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--primary-font);
   background-color: var(--background-color);
   color: var(--text-color);
   display: flex;

@@ -33,7 +33,7 @@ const Home = () => {
     <div className={styles.homeContainer}>
       <Header />
       <main className={styles.main}>
-        <div className={styles.heroImage}>[게임 대표 이미지]</div>
+        <div className={styles.heroImage}></div>
         <nav className={styles.menuButtons}>
           <Button onClick={handleGameStartClick}>게임 시작</Button>
           <Button onClick={handleTutorialClick}>게임 방법</Button>

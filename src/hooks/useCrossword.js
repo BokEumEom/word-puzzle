@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
  * useCrossword 훅
@@ -6,11 +6,16 @@ import { useState } from 'react';
  */
 export const useCrossword = (initialPuzzleData) => {
   const { puzzleGrid: initialGrid, acrossClues, downClues } = initialPuzzleData;
+  
   // 초기 그리드를 깊은 복사해서 상태로 관리
   const [grid, setGrid] = useState(
     initialGrid.map((row) => row.map((cell) => ({ ...cell })))
   );
   const [resultMessage, setResultMessage] = useState('');
+  const [autoSubmitted, setAutoSubmitted] = useState(false);
+
+  // 문자열 정규화 (한글 입력 문제 방지)
+  const normalizeString = (str) => str.trim().replace(/\s+/g, '');
 
   // 각 칸의 입력값 업데이트
   const handleChange = (row, col, value) => {
@@ -20,41 +25,51 @@ export const useCrossword = (initialPuzzleData) => {
       newGrid[row][col].letter = value;
       return newGrid;
     });
+    setAutoSubmitted(false);
   };
 
   // 단서(가로/세로) 검증 함수
-  const checkClue = (clue, direction) => {
+  const checkClue = (clue, direction, latestGrid) => {
     const { startRow, startCol, length, answer } = clue;
     let userAnswer = '';
+
     for (let i = 0; i < length; i++) {
       const r = direction === 'across' ? startRow : startRow + i;
       const c = direction === 'across' ? startCol + i : startCol;
-      userAnswer += grid[r][c].letter;
+      userAnswer += latestGrid[r][c].letter || ''; // 빈 값 방지
     }
-    return userAnswer === answer;
+
+    console.log(`[검증] ${direction} ${clue.number}번 - 입력: ${normalizeString(userAnswer)}, 정답: ${normalizeString(answer)}`);
+    
+    return normalizeString(userAnswer) === normalizeString(answer);
   };
 
   // 제출 시 전체 단서 검증
   const handleSubmit = () => {
     let allCorrect = true;
+    const latestGrid = grid.map(row => row.map(cell => ({ ...cell }))); // 최신 grid 복사
+
     for (const clue of acrossClues) {
-      if (!checkClue(clue, 'across')) {
+      if (!checkClue(clue, 'across', latestGrid)) {
         allCorrect = false;
         break;
       }
     }
+
     if (allCorrect) {
       for (const clue of downClues) {
-        if (!checkClue(clue, 'down')) {
+        if (!checkClue(clue, 'down', latestGrid)) {
           allCorrect = false;
           break;
         }
       }
     }
-    setResultMessage(allCorrect ? '정답입니다!' : '오답입니다. 다시 확인하세요.');
+
+    setResultMessage(allCorrect ? '🎉 정답입니다!' : '❌ 오답입니다. 다시 확인하세요.');
+    setAutoSubmitted(true);
   };
 
-  // 리셋
+  // 리셋: 비블록 셀의 입력값만 초기화
   const handleReset = () => {
     setGrid(
       initialGrid.map((row) =>
@@ -62,7 +77,21 @@ export const useCrossword = (initialPuzzleData) => {
       )
     );
     setResultMessage('');
+    setAutoSubmitted(false);
   };
+
+  // 자동 제출 기능 (입력 완료 시 실행)
+  useEffect(() => {
+    const isComplete = grid.every((row) =>
+      row.every((cell) => cell.isBlock || cell.letter.trim() !== '')
+    );
+
+    if (isComplete && !autoSubmitted) {
+      setTimeout(() => {
+        handleSubmit();
+      }, 100);
+    }
+  }, [grid, autoSubmitted]);
 
   return { grid, handleChange, handleSubmit, handleReset, resultMessage };
 };

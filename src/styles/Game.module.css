@@ -3,27 +3,33 @@
 .gameContainer {
   display: flex;
   flex-direction: column;
+  align-items: center;
   min-height: 100vh;
   background-color: var(--background-color);
+  padding: 0 1rem; /* 좌우 여백 */
 }
 
-/* 메인 콘텐츠 영역: 퍼즐 보드가 중앙에 위치하도록 함 */
+/* 메인 영역: 퍼즐 보드가 중앙에 위치하도록 하고 최대 너비를 제한 */
 .main {
   flex: 1;
   padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  max-width: 640px; /* 7x7, 8x8, 9x9 퍼즐에 적합한 최대 너비 */
 }
 
-/* 푸터 영역: 홈 버튼을 중앙 정렬 */
+/* 푸터 영역: 홈 버튼 중앙 정렬 */
 .footer {
+  width: 100%;
+  max-width: 640px;
   padding: 1rem;
   text-align: center;
   background-color: var(--footer-bg);
 }
 
-/* 미디어 쿼리를 이용해 화면이 넓은 경우 여백 조정 */
+/* 미디어 쿼리를 이용한 반응형 레이아웃 */
 @media (min-width: 768px) {
   .main {
     padding: 2rem;
