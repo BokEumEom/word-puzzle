@@ -1,0 +1,75 @@
+@font-face {
+  font-family: 'Danjo-bold-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Danjo-bold-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  /* 부드럽고 따뜻한 색상 팔레트 */
+  --primary-color: #F4A261;       /* 따뜻한 살구빛 주황 */
+  --primary-hover: #E07A5F;       /* 조금 더 진한 주황 */
+  --background-color: #FFF8F0;    /* 따뜻한 화이트 (크림톤) */
+  --header-bg: linear-gradient(135deg, #F4A261, #E07A5F);
+  --footer-bg: #FCEFE3;           /* 부드러운 베이지 */
+  --text-color: #5D4037;          /* 따뜻한 다크 브라운 */
+  /* 실제 게임 대표 이미지 URL로 교체 */
+  --hero-bg: url('/path/to/hero-image.jpg') center/cover no-repeat;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--primary-hover);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: var(--primary-color);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: var(--text-color);
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: var(--primary-hover);
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

@@ -1,0 +1,74 @@
+.crosswordContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.cellWrapper {
+  position: relative;
+  margin: 2px;
+}
+
+.clueNumber {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 0.6rem;
+  background-color: #fff;
+  padding: 0 2px;
+}
+
+.cellInput {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.blockCell {
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.buttons button {
+  padding: 0.5rem 1rem;
+  background-color: #61dafb;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.result {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* 단서(Clues) 영역 */
+.clues {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.across, .down {
+  width: 45%;
+}
