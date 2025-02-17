@@ -6,14 +6,14 @@ import Clues from './Clues';
 const CrosswordBoard = ({ puzzleData }) => {
   const { grid, handleChange, handleSubmit, handleReset, resultMessage } = useCrossword(puzzleData);
   const { acrossClues, downClues } = puzzleData;
-  const gridSize = grid[0].length; // 퍼즐의 열 개수 (5, 7, 8, 9 등)
+  const gridSize = grid[0].length; // 퍼즐의 열 개수 (5, 7, 8 등)
 
   return (
     <div className={styles.crosswordContainer}>
       {/* 퍼즐 보드 */}
       <div
         className={styles.board}
-        style={{ gridTemplateColumns: `repeat(${gridSize}, 40px)` }} // 동적으로 열 개수 지정
+        style={{ gridTemplateColumns: `repeat(${gridSize}, var(--cell-size))` }}
       >
         {grid.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
