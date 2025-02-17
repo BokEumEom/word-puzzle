@@ -1,28 +1,27 @@
+import React from 'react';
 
-import styles from '../styles/Clues.module.css';
+const Clues = ({ acrossClues, downClues, setActiveClue }) => {
+  const handleClick = (clue, direction) => {
+    setActiveClue({ ...clue, direction });
+  };
 
-const Clues = ({ acrossClues, downClues }) => {
   return (
-    <div className={styles.cluesContainer}>
-      <div className={styles.cluesSection}>
-        <h3 className={styles.title}>가로 열쇠</h3>
-        <ul className={styles.list}>
-          {acrossClues.map((clue) => (
-            <li key={clue.number} className={styles.listItem}>
-              <strong>{clue.number}.</strong> {clue.clue}
-            </li>
-          ))}
-        </ul>
+    <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center' }}>
+      <div>
+        <h3>가로 단서</h3>
+        {acrossClues.map((clue) => (
+          <div key={clue.number} onClick={() => handleClick(clue, 'across')}>
+            <strong>{clue.number}.</strong> {clue.clue}
+          </div>
+        ))}
       </div>
-      <div className={styles.cluesSection}>
-        <h3 className={styles.title}>세로 열쇠</h3>
-        <ul className={styles.list}>
-          {downClues.map((clue) => (
-            <li key={clue.number} className={styles.listItem}>
-              <strong>{clue.number}.</strong> {clue.clue}
-            </li>
-          ))}
-        </ul>
+      <div>
+        <h3>세로 단서</h3>
+        {downClues.map((clue) => (
+          <div key={clue.number} onClick={() => handleClick(clue, 'down')}>
+            <strong>{clue.number}.</strong> {clue.clue}
+          </div>
+        ))}
       </div>
     </div>
   );

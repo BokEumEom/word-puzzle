@@ -1,79 +1,103 @@
+// useCrossword.js
 import { useState, useEffect } from 'react';
 
 /**
  * useCrossword 훅
- * @param {Object} initialPuzzleData - 퍼즐 데이터 { puzzleSize, puzzleGrid, acrossClues, downClues }
+ * @param {Object} puzzleData - 퍼즐 데이터 { puzzleSize, puzzleGrid, acrossClues, downClues }
  */
-export const useCrossword = (initialPuzzleData) => {
-  const { puzzleGrid: initialGrid, acrossClues, downClues } = initialPuzzleData;
+export const useCrossword = (puzzleData) => {
+  const { puzzleGrid, acrossClues, downClues } = puzzleData;
   
-  // 초기 그리드를 깊은 복사해서 상태로 관리
+  // 초기 그리드를 깊은 복사하여 상태로 관리
   const [grid, setGrid] = useState(
-    initialGrid.map((row) => row.map((cell) => ({ ...cell })))
+    puzzleGrid.map((row) => row.map((cell) => ({ ...cell })))
   );
   const [resultMessage, setResultMessage] = useState('');
   const [autoSubmitted, setAutoSubmitted] = useState(false);
+  // 활성 단서를 저장 (예: { number, direction, startRow, startCol, length, answer })
+  const [activeClue, setActiveClue] = useState(null);
 
-  // 문자열 정규화 (한글 입력 문제 방지)
+  // 문자열 정규화: 대소문자 구분 없이 비교 (모두 대문자로)
   const normalizeString = (str) => str.trim().replace(/\s+/g, '').toUpperCase();
 
-  // 각 칸의 입력값 업데이트
+  // 각 셀 입력 업데이트
   const handleChange = (row, col, value) => {
     if (value.length > 1) return; // 한 글자만 허용
-    const upperCaseValue = value.toUpperCase(); // 자동으로 대문자로 변환
+    const upperValue = value.toUpperCase();
     setGrid((prev) => {
       const newGrid = prev.map((r) => r.map((cell) => ({ ...cell })));
-      newGrid[row][col].letter = upperCaseValue;
+      newGrid[row][col].letter = upperValue;
       return newGrid;
     });
     setAutoSubmitted(false);
   };
 
-  // 가로/세로 단서 검증 함수 (공유 셀 고려)
-  const checkClue = (clue, direction, latestGrid) => {
+  // 단서 검증 (활성 단서 기준)
+  const checkClue = (clue, direction, currentGrid) => {
     const { startRow, startCol, length, answer } = clue;
     let userAnswer = '';
 
     for (let i = 0; i < length; i++) {
       const r = direction === 'across' ? startRow : startRow + i;
       const c = direction === 'across' ? startCol + i : startCol;
-      userAnswer += latestGrid[r][c]?.letter || ''; // 빈 값 방지
+      if (!currentGrid[r] || !currentGrid[r][c]) {
+        console.warn(`⚠️ [검증 실패] ${direction} ${clue.number}번: (${r},${c}) 위치 없음`);
+        return false;
+      }
+      userAnswer += currentGrid[r][c].letter || '';
     }
 
-    console.log(`[검증] ${direction} ${clue.number}번 - 입력: ${normalizeString(userAnswer)}, 정답: ${normalizeString(answer)}`);
-    
+    console.log(
+      `[검증] ${direction} ${clue.number}번 - 입력: ${normalizeString(userAnswer)}, 정답: ${normalizeString(answer)}`
+    );
     return normalizeString(userAnswer) === normalizeString(answer);
   };
 
-  // 모든 단서 검증
+  // 수동 제출: 활성 단서만 검증
   const handleSubmit = () => {
-    let allCorrect = true;
-    const latestGrid = grid.map(row => row.map(cell => ({ ...cell }))); // 최신 grid 복사
-
-    for (const clue of acrossClues) {
-      if (!checkClue(clue, 'across', latestGrid)) {
-        allCorrect = false;
-        break;
-      }
+    if (!activeClue) {
+      console.warn('활성 단서가 설정되지 않았습니다.');
+      setResultMessage("단서를 먼저 선택하세요.");
+      return;
     }
-
-    if (allCorrect) {
-      for (const clue of downClues) {
-        if (!checkClue(clue, 'down', latestGrid)) {
-          allCorrect = false;
-          break;
-        }
-      }
-    }
-
-    setResultMessage(allCorrect ? '🎉 정답입니다!' : '❌ 오답입니다. 다시 확인하세요.');
+    const direction = activeClue.direction;
+    const correct = checkClue(activeClue, direction, grid);
+    setResultMessage(
+      correct
+        ? `단서 ${activeClue.number}: 정답입니다!`
+        : `단서 ${activeClue.number}: 오답입니다.`
+    );
     setAutoSubmitted(true);
   };
 
-  // 리셋: 비블록 셀의 입력값만 초기화
+  // 활성 단서에 대해 자동 검증 (해당 단서의 모든 셀이 채워지면)
+  useEffect(() => {
+    if (!activeClue) return;
+    const { direction, startRow, startCol, length } = activeClue;
+    let isComplete = true;
+    for (let i = 0; i < length; i++) {
+      const r = direction === 'across' ? startRow : startRow + i;
+      const c = direction === 'across' ? startCol + i : startCol;
+      if (!grid[r][c].letter.trim()) {
+        isComplete = false;
+        break;
+      }
+    }
+    if (isComplete && !autoSubmitted) {
+      const correct = checkClue(activeClue, direction, grid);
+      setResultMessage(
+        correct
+          ? `단서 ${activeClue.number}: 정답입니다!`
+          : `단서 ${activeClue.number}: 오답입니다.`
+      );
+      setAutoSubmitted(true);
+    }
+  }, [grid, activeClue, autoSubmitted]);
+
+  // 리셋: 비블록 셀의 입력값 초기화
   const handleReset = () => {
     setGrid(
-      initialGrid.map((row) =>
+      puzzleGrid.map((row) =>
         row.map((cell) => (cell.isBlock ? cell : { ...cell, letter: '' }))
       )
     );
@@ -81,18 +105,27 @@ export const useCrossword = (initialPuzzleData) => {
     setAutoSubmitted(false);
   };
 
-  // 자동 제출 기능 (입력 완료 시 실행)
+  // 전체 퍼즐(모든 오픈 셀)이 채워졌을 때 자동 제출 (활성 단서가 설정되어 있을 경우)
   useEffect(() => {
     const isComplete = grid.every((row) =>
       row.every((cell) => cell.isBlock || cell.letter.trim() !== '')
     );
-
-    if (isComplete && !autoSubmitted) {
+    if (isComplete && !autoSubmitted && activeClue) {
       setTimeout(() => {
         handleSubmit();
       }, 100);
     }
-  }, [grid, autoSubmitted]);
+  }, [grid, autoSubmitted, activeClue]);
 
-  return { grid, handleChange, handleSubmit, handleReset, resultMessage };
+  return {
+    grid,
+    handleChange,
+    handleSubmit,
+    handleReset,
+    resultMessage,
+    activeClue,
+    setActiveClue, // 외부에서 활성 단서를 설정할 수 있도록
+  };
 };
+
+export default useCrossword;
