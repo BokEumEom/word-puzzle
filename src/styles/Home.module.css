@@ -41,24 +41,6 @@
   max-width: 300px;
 }
 
-/* 버튼 스타일 */
-.btn {
-  padding: 1rem;
-  background-color: var(--primary-color);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  min-height: 44px;
-}
-
-.btn:hover {
-  background-color: var(--primary-hover);
-  transform: scale(1.03);
-}
-
 /* 태블릿 이상 화면 (반응형) */
 @media (min-width: 768px) {
   .header h1 {

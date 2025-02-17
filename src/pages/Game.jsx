@@ -1,17 +1,20 @@
+// src/pages/Game.jsx
 
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CrosswordBoard from '../components/CrosswordBoard';
+import Header from '../components/Header';
+import Button from '../components/Button';
 import styles from '../styles/Game.module.css';
 
-// 퍼즐 데이터 예시들 (각 데이터 파일로 분리하여 관리)
+// 예시로 5x5 퍼즐 데이터를 import (필요 시 7x7, 9x9도 추가)
 import { puzzleSize5, puzzleGrid5, acrossClues5, downClues5 } from '../data/puzzleData5';
-import { puzzleSize7, puzzleGrid7, acrossClues7, downClues7 } from '../data/puzzleData7';
-import { puzzleSize9, puzzleGrid9, acrossClues9, downClues9 } from '../data/puzzleData9';
 
 const Game = () => {
   const location = useLocation();
-  const { puzzleSize } = location.state || {}; // Home에서 전달한 퍼즐 크기
+  const navigate = useNavigate();
+  const { puzzleSize } = location.state || {};
 
+  // 예시로 5x5 퍼즐만 처리 (실제 프로젝트에서는 puzzleSize에 따라 조건 분기)
   let puzzleData = null;
   if (puzzleSize === 5) {
     puzzleData = {
@@ -20,43 +23,29 @@ const Game = () => {
       acrossClues: acrossClues5,
       downClues: downClues5,
     };
-  } else if (puzzleSize === 7) {
-    puzzleData = {
-      puzzleSize: puzzleSize7,
-      puzzleGrid: puzzleGrid7,
-      acrossClues: acrossClues7,
-      downClues: downClues7,
-    };
-  } else if (puzzleSize === 9) {
-    puzzleData = {
-      puzzleSize: puzzleSize9,
-      puzzleGrid: puzzleGrid9,
-      acrossClues: acrossClues9,
-      downClues: downClues9,
-    };
   } else {
-    // 퍼즐 크기가 전달되지 않은 경우
+    // 퍼즐 크기 정보가 없거나 잘못된 경우 홈으로 이동 안내
     return (
       <div className={styles.gameContainer}>
-        <h2>잘못된 접근입니다. 다시 홈으로 이동해주세요.</h2>
-        <Link to="/">홈으로</Link>
+        <p>잘못된 접근입니다. 홈으로 이동해주세요.</p>
+        <Button onClick={() => navigate('/')}>홈으로</Button>
       </div>
     );
   }
 
   return (
     <div className={styles.gameContainer}>
-      <header className={styles.header}>
-        <h2 className={styles.title}>
-          {puzzleSize}×{puzzleSize} 낱말퀴즈
-        </h2>
-      </header>
+      {/* Header 컴포넌트 적용 */}
+      <Header />
+      
       <main className={styles.main}>
         <CrosswordBoard puzzleData={puzzleData} />
       </main>
-      <nav className={styles.nav}>
-        <Link to="/">홈으로</Link>
-      </nav>
+
+      <footer className={styles.footer}>
+        {/* 홈으로 버튼은 재사용 가능한 Button 컴포넌트 사용 */}
+        <Button onClick={() => navigate('/')}>홈으로</Button>
+      </footer>
     </div>
   );
 };
