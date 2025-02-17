@@ -1,5 +1,5 @@
 // src/components/Modal.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from '../styles/Modal.module.css';
 
 const Modal = ({ onClose, onSelect }) => {

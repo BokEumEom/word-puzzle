@@ -1,5 +1,5 @@
 // src/routes/AppRouter.jsx
-import React, { lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 // 페이지 컴포넌트를 lazy loading 처리 (코드 스플리팅)

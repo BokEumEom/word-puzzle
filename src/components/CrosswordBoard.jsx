@@ -1,9 +1,11 @@
-import React from 'react';
+
 import styles from '../styles/CrosswordBoard.module.css';
 import { useCrossword } from '../hooks/useCrossword';
+import Clues from './Clues'; // 단서 컴포넌트 임포트
 
 const CrosswordBoard = ({ puzzleData }) => {
   const { grid, handleChange, handleSubmit, handleReset, resultMessage } = useCrossword(puzzleData);
+  const { acrossClues, downClues } = puzzleData; // 가로, 세로 단서 데이터
 
   return (
     <div className={styles.crosswordContainer}>
@@ -15,7 +17,6 @@ const CrosswordBoard = ({ puzzleData }) => {
               if (cell.isBlock) {
                 return <div key={colIndex} className={styles.blockCell} />;
               }
-              // 해당 칸이 단서 시작 번호를 가지고 있다면 표시
               const clueNumber = cell.acrossStart || cell.downStart;
               return (
                 <div key={colIndex} className={styles.cellWrapper}>
@@ -39,6 +40,9 @@ const CrosswordBoard = ({ puzzleData }) => {
           </div>
         ))}
       </div>
+
+      {/* 가로 및 세로 단서 컴포넌트 */}
+      <Clues acrossClues={acrossClues} downClues={downClues} />
 
       {/* 제출 및 리셋 버튼 */}
       <div className={styles.buttons}>
