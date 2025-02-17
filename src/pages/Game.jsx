@@ -10,7 +10,6 @@ import styles from '../styles/Game.module.css';
 import { puzzleSize5, puzzleGrid5, acrossClues5, downClues5 } from '../data/puzzleData5';
 import { puzzleSize7, puzzleGrid7, acrossClues7, downClues7 } from '../data/puzzleData7';
 import { puzzleSize8, puzzleGrid8, acrossClues8, downClues8 } from '../data/puzzleData8';
-import { puzzleSize9, puzzleGrid9, acrossClues9, downClues9 } from '../data/puzzleData9';
 
 const Game = () => {
   const location = useLocation();
@@ -39,13 +38,6 @@ const Game = () => {
       puzzleGrid: puzzleGrid8,
       acrossClues: acrossClues8,
       downClues: downClues8,
-    };
-  } else if (puzzleSize === 9) {
-    puzzleData = {
-      puzzleSize: puzzleSize9,
-      puzzleGrid: puzzleGrid9,
-      acrossClues: acrossClues9,
-      downClues: downClues9,
     };
   } else {
     // 퍼즐 크기 정보가 없거나 잘못된 경우 홈으로 이동 안내
