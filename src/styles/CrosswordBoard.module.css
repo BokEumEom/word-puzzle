@@ -3,31 +3,21 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  padding: 1rem;
 }
 
+/* Board를 CSS Grid로 변경 */
 .board {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  gap: 4px;
 }
 
-.row {
-  display: flex;
-}
-
+/* 셀 Wrapper (개별 셀의 상대 위치 지정) */
 .cellWrapper {
   position: relative;
-  margin: 2px;
 }
 
-.clueNumber {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  font-size: 0.6rem;
-  background-color: #fff;
-  padding: 0 2px;
-}
-
+/* 셀 입력 영역 */
 .cellInput {
   width: 40px;
   height: 40px;
@@ -35,14 +25,28 @@
   font-size: 1.2rem;
   border: 1px solid #ccc;
   outline: none;
+  padding: 0;
 }
 
+/* 블록 셀 */
 .blockCell {
   width: 40px;
   height: 40px;
   background-color: var(--primary-color);
 }
 
+/* 셀 좌측 상단 번호 */
+.clueNumber {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 0.6rem;
+  background-color: #fff;
+  padding: 0 2px;
+  z-index: 1;
+}
+
+/* 버튼 영역 */
 .buttons {
   display: flex;
   gap: 8px;
@@ -56,6 +60,7 @@
   color: #fff;
 }
 
+/* 결과 메시지 */
 .result {
   font-weight: bold;
   font-size: 1.2rem;
@@ -66,9 +71,11 @@
   display: flex;
   gap: 16px;
   width: 100%;
+  max-width: 800px;
   justify-content: space-evenly;
 }
 
-.across, .down {
+.across,
+.down {
   width: 45%;
 }
