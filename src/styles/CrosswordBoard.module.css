@@ -1,8 +1,3 @@
-:root {
-  --cell-size: 40px; /* 기본 셀 크기 */
-}
-
-/* 전체 컨테이너 */
 .crosswordContainer {
   display: flex;
   flex-direction: column;
@@ -11,22 +6,21 @@
   padding: 1rem;
 }
 
-/* Board: CSS Grid로 구성 */
+/* Board를 CSS Grid로 변경 */
 .board {
   display: grid;
   gap: 4px;
-  max-width: 100%;
 }
 
-/* 개별 셀 Wrapper */
+/* 셀 Wrapper (개별 셀의 상대 위치 지정) */
 .cellWrapper {
   position: relative;
 }
 
 /* 셀 입력 영역 */
 .cellInput {
-  width: var(--cell-size);
-  height: var(--cell-size);
+  width: 40px;
+  height: 40px;
   text-align: center;
   font-size: 1.2rem;
   border: 1px solid #ccc;
@@ -36,8 +30,8 @@
 
 /* 블록 셀 */
 .blockCell {
-  width: var(--cell-size);
-  height: var(--cell-size);
+  width: 40px;
+  height: 40px;
   background-color: var(--primary-color);
 }
 
@@ -84,15 +78,4 @@
 .across,
 .down {
   width: 45%;
-}
-
-/* 반응형: 작은 화면에서 셀 크기 축소 */
-@media (max-width: 600px) {
-  :root {
-    --cell-size: 30px;
-  }
-  .cellInput,
-  .blockCell {
-    font-size: 1rem;
-  }
 }

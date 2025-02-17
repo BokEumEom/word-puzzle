@@ -15,20 +15,21 @@ export const useCrossword = (initialPuzzleData) => {
   const [autoSubmitted, setAutoSubmitted] = useState(false);
 
   // 문자열 정규화 (한글 입력 문제 방지)
-  const normalizeString = (str) => str.trim().replace(/\s+/g, '');
+  const normalizeString = (str) => str.trim().replace(/\s+/g, '').toUpperCase();
 
   // 각 칸의 입력값 업데이트
   const handleChange = (row, col, value) => {
     if (value.length > 1) return; // 한 글자만 허용
+    const upperCaseValue = value.toUpperCase(); // 자동으로 대문자로 변환
     setGrid((prev) => {
       const newGrid = prev.map((r) => r.map((cell) => ({ ...cell })));
-      newGrid[row][col].letter = value;
+      newGrid[row][col].letter = upperCaseValue;
       return newGrid;
     });
     setAutoSubmitted(false);
   };
 
-  // 단서(가로/세로) 검증 함수
+  // 가로/세로 단서 검증 함수 (공유 셀 고려)
   const checkClue = (clue, direction, latestGrid) => {
     const { startRow, startCol, length, answer } = clue;
     let userAnswer = '';
@@ -36,7 +37,7 @@ export const useCrossword = (initialPuzzleData) => {
     for (let i = 0; i < length; i++) {
       const r = direction === 'across' ? startRow : startRow + i;
       const c = direction === 'across' ? startCol + i : startCol;
-      userAnswer += latestGrid[r][c].letter || ''; // 빈 값 방지
+      userAnswer += latestGrid[r][c]?.letter || ''; // 빈 값 방지
     }
 
     console.log(`[검증] ${direction} ${clue.number}번 - 입력: ${normalizeString(userAnswer)}, 정답: ${normalizeString(answer)}`);
@@ -44,7 +45,7 @@ export const useCrossword = (initialPuzzleData) => {
     return normalizeString(userAnswer) === normalizeString(answer);
   };
 
-  // 제출 시 전체 단서 검증
+  // 모든 단서 검증
   const handleSubmit = () => {
     let allCorrect = true;
     const latestGrid = grid.map(row => row.map(cell => ({ ...cell }))); // 최신 grid 복사
