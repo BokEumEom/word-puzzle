@@ -3,6 +3,7 @@ import { useCrossword } from '../hooks/useCrossword';
 import Cell from './Cell';
 import Clues from './Clues';
 import styles from '../styles/CrosswordBoard.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const CrosswordBoard = ({ puzzleData }) => {
   const {
@@ -16,6 +17,7 @@ const CrosswordBoard = ({ puzzleData }) => {
   } = useCrossword(puzzleData);
   const { acrossClues, downClues } = puzzleData;
   const gridSize = grid[0].length;
+  const navigate = useNavigate();
 
   return (
     <div className={styles.crosswordContainer}>
@@ -46,6 +48,7 @@ const CrosswordBoard = ({ puzzleData }) => {
       <div className={styles.buttons}>
         <button onClick={handleSubmit}>제출</button>
         <button onClick={handleReset}>리셋</button>
+        <button onClick={() => navigate('/')}>홈으로</button>
       </div>
 
       {resultMessage && <div className={styles.result}>{resultMessage}</div>}

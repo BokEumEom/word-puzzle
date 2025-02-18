@@ -2,24 +2,21 @@ import React from 'react';
 import styles from '../styles/CrosswordBoard.module.css';
 
 const Cell = ({ row, col, cellData, onChange }) => {
-  const { isBlock, acrossStart, downStart, letter } = cellData;
-  if (isBlock) {
+  if (cellData.isBlock) {
     return <div className={styles.blockCell} />;
   }
-  const clueNumber = acrossStart || downStart;
+
+  const clueNumber = cellData.acrossStart || cellData.downStart;
+  
   return (
     <div className={styles.cellWrapper}>
-      {clueNumber && (
-        <div className={styles.clueNumber}>
-          {acrossStart && downStart ? `${acrossStart},${downStart}` : acrossStart || downStart}
-        </div>
-      )}
+      {clueNumber && <div className={styles.clueNumber}>{clueNumber}</div>}
       <input
         type="text"
-        maxLength={1}
-        value={letter}
-        onChange={(e) => onChange(row, col, e.target.value)}
-        className={`${styles.cellInput} ${letter === '' ? styles.emptyInput : ''}`}
+        maxLength="1"
+        value={cellData.letter}
+        onChange={(e) => onChange(row, col, e.target.value.toUpperCase())}
+        className={styles.cellInput}
       />
     </div>
   );

@@ -51,16 +51,12 @@ const Game = () => {
 
   return (
     <div className={styles.gameContainer}>
-      {/* Header 컴포넌트 적용 */}
       <Header />
-
-      <main className={styles.main}>
-        <CrosswordBoard puzzleData={puzzleData} />
-      </main>
-
-      <footer className={styles.footer}>
-        <Button onClick={() => navigate('/')}>홈으로</Button>
-      </footer>
+      <div className={styles.contentWrapper}>
+        <main className={styles.main}>
+          <CrosswordBoard puzzleData={puzzleData} />
+        </main>
+      </div>
     </div>
   );
 };
